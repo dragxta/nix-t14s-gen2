@@ -30,12 +30,17 @@
   programs.gh.enable = true;
 
   # Emacs
-  programs.emacs.enable = true;
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacs-pgtk;
+  };
 
   services.emacs = {
     enable = true;
     client.enable = true;
   };
+
+
 
   # Plasma user configuration
   programs.plasma.enable = true;

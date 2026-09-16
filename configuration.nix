@@ -64,6 +64,9 @@
   # Printing
   services.printing.enable = true;
 
+  # Fingerprint reader
+  services.fprintd.enable = true;
+
   # User
   users.users.i = {
     isNormalUser = true;
