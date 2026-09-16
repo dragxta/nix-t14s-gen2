@@ -11,7 +11,14 @@
     "flakes"
   ];
 
-  nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.config = {
+    allowUnfree = true;
+
+    permittedInsecurePackages = [
+      "electron-41.10.6"
+    ];
+  };
 
   # Boot
   boot.loader.systemd-boot.enable = true;

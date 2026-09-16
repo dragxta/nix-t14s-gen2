@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./plasma.nix
+  ];
+
   home.username = "i";
   home.homeDirectory = "/home/i";
 
@@ -9,10 +13,7 @@
     firefox
     kdePackages.kate
     kdePackages.okular
-
-    # Temporarily disabled because its current Electron
-    # dependency is marked insecure in nixpkgs.
-    # rstudio
+    #rstudio
   ];
 
   # Git
@@ -39,11 +40,6 @@
     enable = true;
     client.enable = true;
   };
-
-
-
-  # Plasma user configuration
-  programs.plasma.enable = true;
 
   # Do not change this just because Home Manager is upgraded.
   home.stateVersion = "26.05";
