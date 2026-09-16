@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let
+  rstudio-bin = pkgs.callPackage ./packages/rstudio-bin.nix { };
+in
 {
   imports = [
     ./plasma.nix
@@ -13,7 +16,8 @@
     firefox
     kdePackages.kate
     kdePackages.okular
-    #rstudio
+    rstudio-bin
+    slack
   ];
 
   # Git
