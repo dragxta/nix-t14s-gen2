@@ -19,6 +19,9 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Memory / Swap
+  zramSwap.enable = true;
+
   # Networking
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;

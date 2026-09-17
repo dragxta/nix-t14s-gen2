@@ -40,7 +40,7 @@
     # Four virtual desktops, one row.
     configFile = {
       kwinrc.Desktops = {
-        Number = 4;
+        Number = 6;
         Rows = 1;
       };
     };
