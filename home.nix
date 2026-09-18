@@ -2,6 +2,10 @@
 
 let
   rstudio-bin = pkgs.callPackage ./packages/rstudio-bin.nix { };
+
+  lean4-mode = pkgs.callPackage ./packages/lean4-mode.nix {
+    emacsPackages = pkgs.emacsPackages;
+  };
 in
 {
   imports = [
@@ -20,6 +24,13 @@ in
     slack
   ];
 
+  programs.bash.enable = true;
+  
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+  
   # Git
   programs.git = {
     enable = true;
@@ -35,10 +46,25 @@ in
   programs.gh.enable = true;
 
   # Emacs
+
   programs.emacs = {
-    enable = true;
-    package = pkgs.emacs-pgtk;
+  enable = true;
+  package = pkgs.emacs-pgtk;
+
+  extraPackages = epkgs: with epkgs; [
+    expand-region
+    multiple-cursors
+    magit
+    nix-mode
+    lsp-mode
+    envrc
+    lean4-mode
+    ];
   };
+  
+
+
+home.file.".emacs.d/init.el".source = ./emacs/init.el;
 
   services.emacs = {
     enable = true;
