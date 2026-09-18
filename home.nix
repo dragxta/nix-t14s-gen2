@@ -51,6 +51,7 @@ in
   enable = true;
   package = pkgs.emacs-pgtk;
 
+  
   extraPackages = epkgs: with epkgs; [
     expand-region
     multiple-cursors
@@ -59,6 +60,8 @@ in
     lsp-mode
     envrc
     lean4-mode
+    catppuccin-theme
+    company
     ];
   };
   

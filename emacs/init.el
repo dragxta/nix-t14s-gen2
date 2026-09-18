@@ -41,8 +41,8 @@
 ;; Theme
 ;; ---------------------------------------------------------------------------
 
-;; Excellent built-in dark theme.
-(load-theme 'modus-vivendi t)
+(setq catppuccin-flavor 'mocha)
+(load-theme 'catppuccin t)
 
 
 ;; ---------------------------------------------------------------------------
@@ -254,10 +254,19 @@
 ;; Lean 4
 ;; ---------------------------------------------------------------------------
 
-(when (require 'lean4-mode nil t)
-  ;; Open .lean files using lean4-mode.
-  (add-to-list 'auto-mode-alist '("\\.lean\\'" . lean4-mode)))
+;; LSP
+(setq lsp-enable-snippet nil)
 
+
+;; Completion
+(setq company-minimum-prefix-length 1
+      company-idle-delay 0.2)
+
+(add-hook 'prog-mode-hook #'company-mode)
+
+;; Lean
+(when (require 'lean4-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.lean\\'" . lean4-mode)))
 
 ;; ---------------------------------------------------------------------------
 ;; End
