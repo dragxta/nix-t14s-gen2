@@ -43,11 +43,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792415800,
-        "narHash": "sha256-d2de9lgIcPajmgN+JGoxPwCsuJ3KcjNEsHoIYmKYEgg=",
+        "lastModified": 1792447344,
+        "narHash": "sha256-GOATd/lLEX2bw/JtbgfpVNtdPGFdx4MbPoYdqRhigCg=",
         "ref": "refs/heads/main",
-        "rev": "f6845026116c8c34856cfdd6144ce2d9fcc921e9",
-        "revCount": 15,
+        "rev": "581ca87fc3dd3bbf24f5a48ec331979f42c5473a",
+        "revCount": 16,
         "type": "git",
         "url": "ssh://gitlab-subject-sphinx/subject_sphinx/pdfr.git"
       },

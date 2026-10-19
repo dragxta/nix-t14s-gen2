@@ -76,6 +76,11 @@
   # Fingerprint reader
   services.fprintd.enable = true;
 
+  # Android development. programs.adb was removed from nixpkgs: systemd 258
+  # applies the uaccess rules itself, so a phone over USB no longer needs a
+  # group or udev rules of its own - only the tools.
+  environment.systemPackages = [ pkgs.android-tools ];
+
   # User
   users.users.i = {
     isNormalUser = true;
