@@ -2,10 +2,20 @@
 
 let
   rstudio-bin = pkgs.callPackage ./packages/rstudio-bin.nix { };
-
+  photocraft = pkgs.callPackage ./packages/photocraft.nix { };
   lean4-mode = pkgs.callPackage ./packages/lean4-mode.nix {
     emacsPackages = pkgs.emacsPackages;
   };
+
+  # Tree-sitter grammars for the built-in *-ts-mode majors (c-ts-mode,
+  # c++-ts-mode, cmake-ts-mode). The compilers and clangd come from each
+  # project's own flake via direnv/envrc, not from here.
+  emacs-grammars =
+    pkgs.emacsPackages.treesit-grammars.with-grammars (g: with g; [
+      tree-sitter-c
+      tree-sitter-cpp
+      tree-sitter-cmake
+    ]);
 in
 {
   imports = [
@@ -22,6 +32,13 @@ in
     kdePackages.okular
     rstudio-bin
     slack
+    zip
+    unzip
+    codex
+    claude-code
+    telegram-desktop
+    blender
+    photocraft
   ];
 
   programs.bash.enable = true;
@@ -62,6 +79,13 @@ in
     lean4-mode
     catppuccin-theme
     company
+
+    # C / C++
+    lsp-ui
+    flycheck
+    clang-format
+    cmake-mode
+    emacs-grammars
     ];
   };
   

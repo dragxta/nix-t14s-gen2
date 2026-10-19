@@ -269,6 +269,110 @@
   (add-to-list 'auto-mode-alist '("\\.lean\\'" . lean4-mode)))
 
 ;; ---------------------------------------------------------------------------
+;; C / C++
+;; ---------------------------------------------------------------------------
+
+;; The toolchain (g++/clang, clangd, cmake) is NOT installed globally; it
+;; comes from each project's flake. envrc-global-mode above puts that
+;; devShell's PATH into the buffer's environment, and lsp-deferred waits
+;; until the buffer is actually displayed, so clangd is picked up from the
+;; project rather than from the system.
+
+;; Prefer the tree-sitter majors. The grammars are installed via Nix
+;; (emacs-grammars in home.nix), so no M-x treesit-install-... needed.
+(dolist (remap '((c-mode         . c-ts-mode)
+                 (c++-mode       . c++-ts-mode)
+                 (c-or-c++-mode  . c-or-c++-ts-mode)
+                 (cmake-mode     . cmake-ts-mode)))
+  (add-to-list 'major-mode-remap-alist remap))
+
+;; Treat headers as C++ unless they're obviously C.
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c-or-c++-ts-mode))
+(add-to-list 'auto-mode-alist
+             '("\\.\\(cc\\|cpp\\|cxx\\|hh\\|hpp\\|hxx\\|ipp\\|tpp\\|inl\\)\\'"
+               . c++-ts-mode))
+
+;; Indentation: 2 spaces, K&R braces.
+(setq c-ts-mode-indent-offset 2
+      c-ts-mode-indent-style 'k&r)
+
+
+;; --- LSP (clangd) ----------------------------------------------------------
+
+(setq lsp-clients-clangd-args
+      '("--background-index"
+        "--clang-tidy"
+        "--completion-style=detailed"
+        "--header-insertion=never"
+        "--pch-storage=memory"
+        "-j=4"))
+
+(setq lsp-idle-delay 0.3
+      lsp-enable-on-type-formatting nil
+      lsp-headerline-breadcrumb-enable nil
+      lsp-signature-auto-activate '(:on-trigger-char :after-completion))
+
+(add-hook 'c-ts-mode-hook   #'lsp-deferred)
+(add-hook 'c++-ts-mode-hook #'lsp-deferred)
+(add-hook 'cmake-ts-mode-hook #'lsp-deferred)   ; cmake-language-server
+
+;; C-c l is the LSP prefix: C-c l g g = find definition, C-c l r r = rename,
+;; C-c l a a = code actions, C-c l h h = describe thing at point.
+(with-eval-after-load 'lsp-mode
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+
+;; Richer UI on top of lsp-mode: sideline diagnostics, peek, doc popup.
+(when (require 'lsp-ui nil t)
+  (setq lsp-ui-doc-enable nil              ; use C-c l h h / M-x lsp-ui-doc-glance
+        lsp-ui-doc-position 'at-point
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-sideline-show-code-actions t
+        lsp-ui-sideline-diagnostic-max-lines 3
+        lsp-ui-peek-always-show t)
+  (add-hook 'lsp-mode-hook #'lsp-ui-mode)
+  (with-eval-after-load 'lsp-ui
+    (define-key lsp-ui-mode-map (kbd "M-.") #'lsp-ui-peek-find-definitions)
+    (define-key lsp-ui-mode-map (kbd "M-?") #'lsp-ui-peek-find-references)))
+
+;; Diagnostics via flycheck (lsp-mode picks it up automatically when present).
+(when (require 'flycheck nil t)
+  (setq flycheck-indication-mode 'left-margin))
+
+
+;; --- clang-format ----------------------------------------------------------
+
+;; Formats according to the project's .clang-format file.
+;;
+;;   C-c f   reformat the whole buffer
+(when (require 'clang-format nil t)
+  (with-eval-after-load 'c-ts-mode
+    (define-key c-ts-base-mode-map (kbd "C-c f")
+                #'clang-format-buffer)))
+
+;; Uncomment to format on every save instead:
+;; (add-hook 'c++-ts-mode-hook
+;;           (lambda ()
+;;             (add-hook 'before-save-hook #'clang-format-buffer nil t)))
+
+
+;; --- Building and debugging ------------------------------------------------
+
+;; <f7> compile, <f8> re-run the last compile without being asked.
+(global-set-key (kbd "<f7>") #'compile)
+(global-set-key (kbd "<f8>") #'recompile)
+
+(setq compilation-scroll-output 'first-error
+      compilation-ask-about-save nil)
+
+;; Colourise compiler output.
+(add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
+
+;; gdb: one window per purpose (locals, breakpoints, io, ...).
+(setq gdb-many-windows t
+      gdb-show-main t)
+
+
+;; ---------------------------------------------------------------------------
 ;; End
 ;; ---------------------------------------------------------------------------
 
