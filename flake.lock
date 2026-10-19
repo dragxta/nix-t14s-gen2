@@ -36,6 +36,26 @@
         "type": "github"
       }
     },
+    "pdfr": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792413789,
+        "narHash": "sha256-xNaBsk+MkXHRcGw1T2e+XiVgAWQLy2eATUFjPmOqeho=",
+        "ref": "refs/heads/main",
+        "rev": "f5e514aa46f5b9ed8ee472b8e30fa2a77f3b129a",
+        "revCount": 14,
+        "type": "git",
+        "url": "ssh://gitlab-subject-sphinx/subject_sphinx/pdfr.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://gitlab-subject-sphinx/subject_sphinx/pdfr.git"
+      }
+    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -63,6 +83,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "pdfr": "pdfr",
         "plasma-manager": "plasma-manager"
       }
     }

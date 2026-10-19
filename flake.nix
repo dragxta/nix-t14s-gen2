@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    pdfr = {
+      url = "git+ssh://gitlab-subject-sphinx/subject_sphinx/pdfr.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,12 +21,15 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, plasma-manager, ... }: {
+  outputs = { nixpkgs, home-manager, plasma-manager, pdfr, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
       modules = [
         ./configuration.nix
+
+        pdfr.nixosModules.default
+        { programs.pdfr.enable = true; }
 
         home-manager.nixosModules.home-manager
 
