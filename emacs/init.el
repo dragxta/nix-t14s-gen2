@@ -265,8 +265,21 @@
 (add-hook 'prog-mode-hook #'company-mode)
 
 ;; Lean
+;; lean4-mode already auto-starts the server: lean4-settings.el defines
+;; `lean4-mode-hook' as (list #'lsp). The problem is where that server runs.
+;;
+;; lsp-mode launches it in the *buffer's* directory (its
+;; `lsp-use-workspace-root-for-server-default-directory' defaults to nil), and
+;; `lake' looks for lakefile.toml only in its own cwd -- it does not search
+;; upward. So opening a file in a subdirectory, e.g. learn/Learn/Tactics.lean,
+;; makes `lake serve' miss the lakefile and fall back to plain `lean --server'
+;; with no LEAN_PATH: the server looks alive but resolves no imports and the
+;; infoview stays empty. Pinning cwd to the workspace root fixes it.
 (when (require 'lean4-mode nil t)
-  (add-to-list 'auto-mode-alist '("\\.lean\\'" . lean4-mode)))
+  (add-to-list 'auto-mode-alist '("\\.lean\\'" . lean4-mode))
+  (add-hook 'lean4-mode-hook
+            (lambda ()
+              (setq-local lsp-use-workspace-root-for-server-default-directory t))))
 
 ;; ---------------------------------------------------------------------------
 ;; C / C++
