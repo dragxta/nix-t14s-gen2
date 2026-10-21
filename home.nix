@@ -24,6 +24,11 @@ in
 
   home.username = "i";
   home.homeDirectory = "/home/i";
+  home.sessionPath = [ "$HOME/.local/bin" ];
+  programs.bash.initExtra = ''
+    export PATH="$HOME/.local/bin:$PATH"
+  '';
+
 
   # Applications
   home.packages = with pkgs; [
