@@ -76,6 +76,13 @@
   # Fingerprint reader
   services.fprintd.enable = true;
 
+  # This laptop also serves: it hosts a writing app that other people reach
+  # over a tunnel. Closing the lid on mains power therefore leaves it running
+  # rather than suspending, since suspending takes the app offline and, with a
+  # Cloudflare quick tunnel, loses the public address for good. On battery it
+  # still suspends, because a bag is no place to hold a server.
+  services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
+
   # Android development. programs.adb was removed from nixpkgs: systemd 258
   # applies the uaccess rules itself, so a phone over USB no longer needs a
   # group or udev rules of its own - only the tools.
@@ -90,6 +97,11 @@
       "networkmanager"
       "wheel"
     ];
+
+    # Start this user's services at boot instead of waiting for someone to log
+    # in, and keep them running after logout. Without this the writing app
+    # comes back only once a person sits down at the machine.
+    linger = true;
   };
 
   # Do not change this just because NixOS is upgraded.
