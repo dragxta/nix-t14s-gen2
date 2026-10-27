@@ -91,6 +91,21 @@
   # group or udev rules of its own - only the tools.
   environment.systemPackages = [ pkgs.android-tools ];
 
+  # A loader for prebuilt binaries that were not built for NixOS.
+  #
+  # The Claude Code extension for VS Code ships its own 280MB `claude`,
+  # dynamically linked against a generic Linux, and it prefers that over
+  # anything on PATH -- there is no setting to point it at the one in
+  # this user's profile. Without a loader it gets the stub, which exists
+  # only to say that NixOS cannot run such a thing:
+  #
+  #     Could not start dynamically linked executable: .../native-binary/claude
+  #
+  # This is the arrangement that link recommends. It is not only for the
+  # one extension: a language server or debug adapter downloaded by any
+  # extension is the same prebuilt binary with the same problem.
+  programs.nix-ld.enable = true;
+
   # User
   users.users.i = {
     isNormalUser = true;

@@ -66,34 +66,28 @@ in
       };
     };
   };
-
+  
   programs.vscode = {
     enable = true;
 
     profiles.default = {
       extensions = with pkgs.vscode-extensions; [
+        anthropic.claude-code
+        ms-python.python
+        ms-pyright.pyright
         dracula-theme.theme-dracula
         jnoortheen.nix-ide
         mkhl.direnv
         dotenv.dotenv-vscode
         editorconfig.editorconfig
         esbenp.prettier-vscode
-        eamodio.gitlens
         usernamehw.errorlens
-        streetsidesoftware.code-spell-checker
+        tomoki1207.pdf
       ];
 
       enableMcpIntegration = true;
-      userSettings = {
-        "cSpell.enabledLanguageIds" = [
-          "markdown"
-          "plaintext"
-        ];
-      };
     };
   };
-
-
 
   # Git
   programs.git = {
