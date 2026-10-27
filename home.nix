@@ -33,6 +33,7 @@ in
   # Applications
   home.packages = with pkgs; [
     firefox
+    ungoogled-chromium
     kdePackages.kate
     kdePackages.okular
     rstudio-bin
@@ -42,8 +43,10 @@ in
     codex
     claude-code
     telegram-desktop
+    signal-desktop
     blender
     photocraft
+    gimp
   ];
 
   programs.bash.enable = true;
@@ -53,6 +56,45 @@ in
     nix-direnv.enable = true;
   };
   
+  programs.mcp = {
+    enable = true;
+
+    servers = {
+      playwright = {
+        command = "${pkgs.nodejs}/bin/npx";
+        args = [ "-y" "@playwright/mcp@latest" ];
+      };
+    };
+  };
+
+  programs.vscode = {
+    enable = true;
+
+    profiles.default = {
+      extensions = with pkgs.vscode-extensions; [
+        dracula-theme.theme-dracula
+        jnoortheen.nix-ide
+        mkhl.direnv
+        dotenv.dotenv-vscode
+        editorconfig.editorconfig
+        esbenp.prettier-vscode
+        eamodio.gitlens
+        usernamehw.errorlens
+        streetsidesoftware.code-spell-checker
+      ];
+
+      enableMcpIntegration = true;
+      userSettings = {
+        "cSpell.enabledLanguageIds" = [
+          "markdown"
+          "plaintext"
+        ];
+      };
+    };
+  };
+
+
+
   # Git
   programs.git = {
     enable = true;

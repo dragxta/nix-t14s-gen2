@@ -27,8 +27,10 @@
   networking.networkmanager.enable = true;
 
   # Bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
 
 
   # Locale
@@ -76,12 +78,6 @@
   # Fingerprint reader
   services.fprintd.enable = true;
 
-  # A permanent public address for the writing app, without a domain. A
-  # Cloudflare quick tunnel hands out a new address whenever it restarts, so
-  # every link given to anyone eventually dies; a Tailscale funnel keeps one
-  # hostname for good. Set up once with `tailscale up`, then
-  # `tailscale funnel --bg 7331`, and the configuration survives reboots.
-  services.tailscale.enable = true;
 
   # This laptop also serves: it hosts a writing app that other people reach
   # over a tunnel. Closing the lid on mains power therefore leaves it running
